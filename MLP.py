@@ -38,8 +38,6 @@ class MLP(object):
     for layer in self.layers:
       self.params += layer.params
 
-    
-
 
   def forwardProp(self , x):
     for layer in self.layers:
@@ -50,9 +48,12 @@ class MLP(object):
   	return self.forwardProp(x)
 
   def squareError(self , x , y):
-    return T.sum((self.output(x) - y)**2)
-
+    return T.sum((self.predict(x) - y)**2)
+  
   def crossEntropyError(self , x , y):
-
+    temp = T.dot(x, self.W) + self.b
+    p_y_given_x = T.nnet.softmax(temp)
+    return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
+  
     
   def getNumberOfHidden(self):

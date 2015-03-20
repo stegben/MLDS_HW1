@@ -24,18 +24,40 @@ def MLPtrainer(learning_rate = 0.01,
   regL2 = []
   for layer in net.layers:
   	regL2 += (layer.W ** 2).mean()
-  
 
-  cost = 
+  cost = (
+          net.crossEntropyError(x,y)
+        + L1 * regL1
+        + L2 * regL2
+    )
+
+  gparams = [T.grad(cost, param) for param in net.params]
+
+  updates = [
+        (param, param - learning_rate * gparam)
+        for param, gparam in zip(net.params, gparams)
+  ]
+
+  train_model = theano.function(
+             inputs = [x,y],
+             outputs = cost ,
+             updates = updates
+
+  	)
+
+
   print('start training...')
-  while epoch != 0
-    print('epoch','')
+  itr=0
+  
+  while itr < epoch :
+    print('epoch : ',str(itr))
     net.
 
 
 
 
     epoch -= 1
+    itr +=1
 
 def 
 
