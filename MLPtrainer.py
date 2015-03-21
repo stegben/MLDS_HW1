@@ -5,10 +5,17 @@ import theano.tensor as T
 import MLP
 
 """
+Train a fully connected multilayer NNet
 
+Tradition Back prop, without pre-training
+with: 
+	1. L1 and L2 regularization
+	2. adjustable mini-batch SGD
+	3. momentum
 
 """
-def MLPtrainer(learning_rate = 0.01,
+class MLPtrainer(object):
+  def __init__(learning_rate = 0.01,
   	           momentum = 0.9,
   	           L1 = 0.0,
   	           L2 = 0.0,
@@ -17,52 +24,60 @@ def MLPtrainer(learning_rate = 0.01,
   	           x ,
   	           y ,
   	           net ):
-  regL1 = []
-  for layer in net.layers:
-  	regL1 += abs(layer.W).mean()
 
-  regL2 = []
-  for layer in net.layers:
-  	regL2 += (layer.W ** 2).mean()
+    cost = costFntWithL1L2(net,L1,L2)
 
-  cost = (
+    updates = fixedLearningRateUpdate(cost , net.params , learning_rate)
+
+    # updates = momentumGradientUpdate(cost,net.params,learning_rate,momentum)
+  
+    train_model = theano.function(
+             inputs = [x,y],
+             outputs = cost ,
+             updates = updates
+  	)
+
+    print('start training...')
+    print('')
+    itr=0
+
+    while itr < epoch :
+      print('epoch : ',str(itr))
+      for 
+        cost = train_model()
+
+      epoch -= 1
+      itr +=1
+
+  def costFntWithL1L2(net , L1 , L2):
+    regL1 = []
+    for layer in net.layers:
+    	regL1 += abs(layer.W).mean()
+
+    regL2 = []
+    for layer in net.layers:
+  	  regL2 += (layer.W ** 2).mean()
+
+    cost = (
           net.crossEntropyError(x,y)
         + L1 * regL1
         + L2 * regL2
     )
+    return cost
 
-  gparams = [T.grad(cost, param) for param in net.params]
+  def fixedLearningRateUpdate(cost , params , learning_rate):
+    gparams = [T.grad(cost, param) for param in params]
 
-  updates = [
+    updates = [
         (param, param - learning_rate * gparam)
-        for param, gparam in zip(net.params, gparams)
-  ]
+        for param, gparam in zip(params, gparams)
+    ]
+    return updates
 
-  train_model = theano.function(
-             inputs = [x,y],
-             outputs = cost ,
-             updates = updates
-
-  	)
-
-
-  print('start training...')
-  itr=0
   
-  while itr < epoch :
-    print('epoch : ',str(itr))
-    net.
 
 
-
-
-    epoch -= 1
-    itr +=1
-
-def 
-
-
-def gradient_updates_momentum(cost, params, learning_rate, momentum):
+def momentumGradientUpdates(cost, params, learning_rate, momentum):
     '''
     Compute updates for gradient descent with momentum
     
@@ -97,3 +112,6 @@ def gradient_updates_momentum(cost, params, learning_rate, momentum):
         # Note that we don't need to derive backpropagation to compute updates - just use T.grad!
         updates.append((param_update, momentum*param_update + (1. - momentum)*T.grad(cost, param)))
     return updates
+
+
+def updateModel(net,x,y):

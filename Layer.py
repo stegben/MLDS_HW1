@@ -78,6 +78,25 @@ class Layer(object):
 
     return self.output
   
+  def setActivationFunction(self , aFnt):
+    self.aFnt = aFnt 
+
+  def setWeight(self , W):
+    """
+    change the weight matrix
+
+    use it if you want to initialize
+    the weight matrix outside the object
+    """
+    self.W = W
+
+  def setBias(self , b):
+    self.b = b
+  
+  def setName(self , name):
+    self.name = name
+
+  """
   def crossEntropyError(self , y):
     '''
     negative log likelihood
@@ -95,23 +114,4 @@ class Layer(object):
     if not self.output:
       raise TypeError(self.name , ': feed something first')
     return T.mean((self.output - y)**2)
-    
-
-
-  def setActivationFunction(self , aFnt):
-    self.aFnt = aFnt 
-
-  def setWeight(self , W):
-    """
-    change the weight matrix
-    
-    use it if you want to initialize
-    the weight matrix outside the object
-    """
-    self.W = W
-
-  def setBias(self , b):
-    self.b = b
-  
-  def setName(self , name):
-    self.name = name
+  """
