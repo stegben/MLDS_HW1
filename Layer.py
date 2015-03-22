@@ -33,7 +33,7 @@ class Layer(object):
     ###################################
     # weight and bias initialization #
     ###################################
-    rng = np.random.RandomState(1234)
+    rng = np.random.RandomState()
     W_values = np.asarray(
         rng.uniform(
             low=-np.sqrt(6. / (n_in + n_out)),

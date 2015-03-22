@@ -51,8 +51,9 @@ class MLP(object):
   
   def crossEntropyError(self , x , y):
     temp = self.predict(x)
-    p_y_given_x = T.nnet.softmax(temp)
-    return -T.mean(T.log(p_y_given_x)[T.arange(y.shape[0]), y])
+    return T.mean(T.nnet.categorical_crossentropy(temp,y))
+    # p_y_given_x = T.nnet.softmax(temp)
+    # return -T.mean(T.log(p_y_given_x)[T.arange(y.shape[0]), y])
       
   def getNumberOfHidden(self):
   	print('input:' , str(self.struct[0]))
