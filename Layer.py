@@ -42,7 +42,7 @@ class Layer(object):
         ),
         dtype=theano.config.floatX
     )
-    if aFnt == theano.tensor.nnet.sigmoid:
+    if aFnt == T.nnet.sigmoid:
       W_values *= 4
     self.W = theano.shared(value=W_values, name='W', borrow=True)
 
@@ -61,13 +61,11 @@ class Layer(object):
     if len(input) != self.n_in :
       raise TypeError(self.name , ": wrong input dimension")
     """
-    self.input = input
     
-    a = self.input
     W = self.W
     b = self.b
     
-    output = T.dot(a , W) + b
+    output = T.dot(input , W) + b
     
     if self.aFnt is None:
       self.output = output

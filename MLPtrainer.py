@@ -40,7 +40,7 @@ def MLPtrainer(x ,
              updates = updates
   	)
   e = train_model(x,y)
-  print(cost)
+  print(e)
   """
   print('start training...')
   print('')
