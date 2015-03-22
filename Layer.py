@@ -54,6 +54,7 @@ class Layer(object):
     self.aFnt = aFnt
     self.input = None
     self.output = None
+    self.z = None
 
 
   def feed(self , input):
@@ -61,16 +62,16 @@ class Layer(object):
     if len(input) != self.n_in :
       raise TypeError(self.name , ": wrong input dimension")
     """
-    
+    self.input = input
     W = self.W
     b = self.b
     
-    output = T.dot(input , W) + b
+    self.z = T.dot(self.input , W) + b
     
     if self.aFnt is None:
-      self.output = output
+      self.output = self.z
     else:
-      self.output = self.aFnt(output)
+      self.output = self.aFnt(self.z)
 
     return self.output
 

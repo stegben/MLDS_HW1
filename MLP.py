@@ -22,7 +22,7 @@ class MLP(object):
     # construct multi-layer NNet
     #####################################
     self.layers = []
-    for i in range( len(self.struct) - 1 ):
+    for i in range( len(self.struct) - 2 ):
       self.layers.append(
       	                 Layer( 
       	                 	    name = ['layer ' , str(i+1)] ,
@@ -30,7 +30,15 @@ class MLP(object):
       	                        n_out = self.struct[i+1]     ,
       	                      )
                         )
-    self.layers[-1].setName('output layer')
+    self.layers.append(
+                       Layer(
+                             name = 'output layer' ,
+                             n_in = self.struct[-2] ,
+                             n_out = self.struct[-1] ,
+                             aFnt = T.nnet.softmax
+                       	    )
+
+                      )
 
     self.params = []
     for layer in self.layers:
