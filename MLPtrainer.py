@@ -2,7 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-import MLP
+from MLP import MLP
 
 """
 Train a fully connected multilayer NNet
@@ -14,65 +14,71 @@ with:
 	3. momentum
 
 """
-class MLPtrainer(object):
-  def __init__(learning_rate = 0.01,
+def MLPtrainer(x ,
+  	           y ,
+  	           net ,
+	           learning_rate = 0.01,
   	           momentum = 0.9,
   	           L1 = 0.0,
   	           L2 = 0.0,
   	           batch_size = 1,
-  	           epoch = 1,
-  	           x ,
-  	           y ,
-  	           net ):
+  	           epoch = 1 ):
 
-    cost = costFntWithL1L2(net,L1,L2)
-
-    updates = fixedLearningRateUpdate(cost , net.params , learning_rate)
-
-    # updates = momentumGradientUpdate(cost,net.params,learning_rate,momentum)
+  input = T.matrix('input')
+  label = T.matrix('label')
   
-    train_model = theano.function(
-             inputs = [x,y],
+  cost = net.squareError(x=input,y=label)
+  # cost = costFntWithL1L2(net,L1,L2,input,label)
+
+  updates = fixedLearningRateUpdate(cost , net.params , learning_rate)
+
+  # updates = momentumGradientUpdate(cost,net.params,learning_rate,momentum)
+  
+  train_model = theano.function(
+             inputs = [input,label],
              outputs = cost ,
              updates = updates
   	)
+  e = train_model(x,y)
+  print(cost)
+  """
+  print('start training...')
+  print('')
+  itr=0
 
-    print('start training...')
-    print('')
-    itr=0
+  while itr < epoch :
+    print('epoch : ',str(itr))
+    for 
+      cost = train_model()
 
-    while itr < epoch :
-      print('epoch : ',str(itr))
-      for 
-        cost = train_model()
+    epoch -= 1
+    itr +=1
+   """
 
-      epoch -= 1
-      itr +=1
+def costFntWithL1L2(net , L1 , L2 ,x,y):
+  regL1 = []
+  for layer in net.layers:
+  	regL1 += abs(layer.W).mean()
 
-  def costFntWithL1L2(net , L1 , L2):
-    regL1 = []
-    for layer in net.layers:
-    	regL1 += abs(layer.W).mean()
+  regL2 = []
+  for layer in net.layers:
+  	regL2 += (layer.W ** 2).mean()
 
-    regL2 = []
-    for layer in net.layers:
-  	  regL2 += (layer.W ** 2).mean()
-
-    cost = (
+  cost = (
           net.crossEntropyError(x,y)
         + L1 * regL1
         + L2 * regL2
     )
-    return cost
+  return cost
 
-  def fixedLearningRateUpdate(cost , params , learning_rate):
-    gparams = [T.grad(cost, param) for param in params]
+def fixedLearningRateUpdate(cost , params , learning_rate):
+  gparams = [T.grad(cost, param) for param in params]
 
-    updates = [
+  updates = [
         (param, param - learning_rate * gparam)
         for param, gparam in zip(params, gparams)
-    ]
-    return updates
+  ]
+  return updates
 
   
 
@@ -114,4 +120,4 @@ def momentumGradientUpdates(cost, params, learning_rate, momentum):
     return updates
 
 
-def updateModel(net,x,y):
+# def updateModel(net,x,y):

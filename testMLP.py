@@ -2,23 +2,25 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-import MLP
+
+from MLP import MLP
 import MLPtrainer
 
-hiddenStruct = [128]
+hiddenStruct = [5]
 model = MLP(
-	        n_in=69 ,
-	        n_out=48 ,
+	        n_in=3 ,
+	        n_out=2 ,
 	        hidStruct = hiddenStruct
 	       )
 
 N=20
-np.ramdom.seed(1234)
-input = 
-label = 
+np.random.seed(1234)
+input = np.array([1,2,3],dtype=theano.config.floatX)
+label = np.array([0,1],dtype=theano.config.floatX)
 
-MLPtrainer(
-	       net = model ,
-	       x = X ,
-	       y = Y 
-	      )
+print(model.predict(np.array([2,3,4])))
+
+t = MLPtrainer.MLPtrainer(
+	       x = input ,
+	       y = label ,
+	       net = model )

@@ -20,10 +20,10 @@ class Layer(object):
 
 
   """
-  def __init__(self ,  
-               name = 'some_layer', 
+  def __init__(self ,
                n_in , 
                n_out , 
+               name = 'some_layer',
                aFnt = T.nnet.sigmoid ):
     
     self.name = name  
@@ -34,35 +34,33 @@ class Layer(object):
     # weight and bias initialization #
     ###################################
     rng = np.random.RandomState(1234)
-    W_values = numpy.asarray(
+    W_values = np.asarray(
         rng.uniform(
-            low=-numpy.sqrt(6. / (n_in + n_out)),
-            high=numpy.sqrt(6. / (n_in + n_out)),
+            low=-np.sqrt(6. / (n_in + n_out)),
+            high=np.sqrt(6. / (n_in + n_out)),
             size=(n_in, n_out)
         ),
         dtype=theano.config.floatX
     )
-    if activation == theano.tensor.nnet.sigmoid:
+    if aFnt == theano.tensor.nnet.sigmoid:
       W_values *= 4
     self.W = theano.shared(value=W_values, name='W', borrow=True)
 
-    b_values = numpy.zeros((n_out,), dtype=theano.config.floatX)
+    b_values = np.zeros((n_out,), dtype=theano.config.floatX)
     self.b = theano.shared(value=b_values, name='b', borrow=True)
 
     self.params = [self.W , self.b]
     
-    ############################################
-    # calculate output value if input is given #
-    ############################################
     self.aFnt = aFnt
     self.input = None
     self.output = None
 
 
   def feed(self , input):
+    """
     if len(input) != self.n_in :
       raise TypeError(self.name , ": wrong input dimension")
-    
+    """
     self.input = input
     
     a = self.input
@@ -77,6 +75,8 @@ class Layer(object):
       self.output = self.aFnt(output)
 
     return self.output
+
+
   
   def setActivationFunction(self , aFnt):
     self.aFnt = aFnt 
@@ -88,10 +88,16 @@ class Layer(object):
     use it if you want to initialize
     the weight matrix outside the object
     """
-    self.W = W
+    self.W = theano.shared(value = W.astype(theano.config.floatX),
+                           name = 'W' ,
+                           borrow = True)
+    self.params = [self.W, self.b]
 
   def setBias(self , b):
-    self.b = b
+    self.b = theano.shared(value = b.astype(theano.config.floatX) ,
+                           name = 'b' ,
+                           borrow = True)
+    self.params = [self.W, self.b]
   
   def setName(self , name):
     self.name = name

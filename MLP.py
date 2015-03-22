@@ -2,7 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
-import Layer
+from Layer import Layer
 
 class MLP(object):
   
@@ -16,15 +16,13 @@ class MLP(object):
     self.n_out = n_out  # number of output labels
     self.hidStruct = hidStruct # a list describe the nodes of each hidden layer
 
-    self.struct = [ [self.n_in] ,
-                     self.hidden ,
-                    [self.n_out] ] # nodes of all layers
+    self.struct =  [self.n_in] + self.hidStruct + [self.n_out] # nodes of all layers
     
     #####################################
     # construct multi-layer NNet
     #####################################
     self.layers = []
-    for i in renge( len(self.struct) - 1 )
+    for i in range( len(self.struct) - 1 ):
       self.layers.append(
       	                 Layer( 
       	                 	    name = ['layer ' , str(i+1)] ,
@@ -37,6 +35,7 @@ class MLP(object):
     self.params = []
     for layer in self.layers:
       self.params += layer.params
+    # print(self.params)
 
 
   def forwardProp(self , x):
@@ -51,9 +50,9 @@ class MLP(object):
     return T.mean((self.predict(x) - y)**2)
   
   def crossEntropyError(self , x , y):
-    temp = T.dot(x, self.W) + self.b
+    temp = self.predict(x)
     p_y_given_x = T.nnet.softmax(temp)
-    return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
+    return -T.mean(T.log(p_y_given_x)[T.arange(y.shape[0]), y])
       
   def getNumberOfHidden(self):
   	print('input:' , str(self.struct[0]))
