@@ -34,17 +34,16 @@ def MLPtrainer(x , y , net ,
   # cost = net.crossEntropyError(x=input , y=label)
   cost = costFntWithL1L2(net,L1,L2,input,label)
 
-  updates = fixedLearningRateUpdate(cost , net.params , learning_rate)
+  # updates = fixedLearningRateUpdate(cost , net.params , learning_rate)
 
-  # updates = momentumGradientUpdate(cost , net.params , learning_rate , momentum)
+  updates = momentumGradientUpdate(cost , net.params , learning_rate , momentum)
   
   train_model = theano.function(
              inputs = [input,label],
              outputs = cost ,
              updates = updates
   	)
-  e = train_model(x,y)
-  return(e)
+  return(train_model)
   
 
 def costFntWithL1L2(net , L1 , L2 ,x,y):

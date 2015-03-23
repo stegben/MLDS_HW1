@@ -33,9 +33,7 @@ print(f(input))
 
 label = np.array([[0,1],[1,0]],dtype=theano.config.floatX)
 
-
-for i in range(20):
-  t = MLPtrainer.MLPtrainer(
+trainer = MLPtrainer.MLPtrainer(
 	       x = input ,
 	       y = label ,
 	       net = model ,
@@ -43,5 +41,8 @@ for i in range(20):
 	       momentum = 0.0 ,
 	       L1 = 0.1 , 
 	       L2 = 0.1 )
-  print(t)
+
+for i in range(20):
+  e = trainer(input ,label) 
+  print(e)
 

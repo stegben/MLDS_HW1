@@ -59,7 +59,10 @@ class MLP(object):
   
   def crossEntropyError(self , x , y):
     temp = self.predict(x)
-    return T.mean(T.nnet.categorical_crossentropy(temp,y))
+    if self.n_out == 1 :
+      return T.mean(T.nnet.binary_crossentropy(temp,y))
+    else:
+      return T.mean(T.nnet.categorical_crossentropy(temp,y))
     # p_y_given_x = T.nnet.softmax(temp)
     # return -T.mean(T.log(p_y_given_x)[T.arange(y.shape[0]), y])
       
