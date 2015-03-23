@@ -34,8 +34,6 @@ print(f(input))
 label = np.array([[0,1],[1,0]],dtype=theano.config.floatX)
 
 trainer = MLPtrainer.MLPtrainer(
-	       x = input ,
-	       y = label ,
 	       net = model ,
 	       learning_rate = 0.1 ,
 	       momentum = 0.0 ,

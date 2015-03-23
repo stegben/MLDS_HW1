@@ -21,7 +21,7 @@ TODO:
 1. momentumGradientUpdate
 2. 
 """
-def MLPtrainer(x , y , net ,
+def MLPtrainer(net ,
 	           learning_rate = 0.01,
   	           momentum = 0.9 ,
   	           L1 = 0.0 ,
