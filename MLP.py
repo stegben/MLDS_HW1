@@ -71,3 +71,12 @@ class MLP(object):
   	print(self.struct[1:-2])
   	print('output:' , str(self.struct[-1]))
   	return self.struct
+
+  def dAPreTraining(self, x):
+    for layer in self.layers:
+      layer.doPreTraining(x, 0.4, 0.3)
+      x = layer.feed(x)
+      tmp = theano.function([],x);
+      x = tmp();
+
+

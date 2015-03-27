@@ -37,10 +37,10 @@ trainer = MLPtrainer.MLPtrainer(
 	       net = model ,
 	       learning_rate = 0.1 ,
 	       momentum = 0.0 ,
-	       L1 = 0.1 , 
-	       L2 = 0.1 )
+	       L1 = 0.0 , 
+	       L2 = 0.0 )
 
-for i in range(20):
+for i in range(200):
   e = trainer(input ,label) 
   print(e)
 
